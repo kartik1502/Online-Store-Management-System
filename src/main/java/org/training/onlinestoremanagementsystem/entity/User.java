@@ -20,9 +20,9 @@ public class User {
 
     private String emailId;
 
-    private String password;
+    private int age;
 
-    private String contactNumber;
+    private String password;
 
     private Role role;
 

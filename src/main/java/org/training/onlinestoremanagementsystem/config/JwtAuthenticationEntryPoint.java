@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 import org.training.onlinestoremanagementsystem.exception.ErrorResponse;
 
 import javax.servlet.ServletException;
@@ -15,9 +16,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Set;
 
+@Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
-    @Value("$(spring.application.un_authorized)")
+    @Value("${spring.application.un_authorized}")
     private String unauthorizedErrorCode;
 
     private static final long serialVersionUID = 1L;
