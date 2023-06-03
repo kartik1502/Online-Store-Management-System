@@ -38,10 +38,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        UserDetails user = userService.loadUserByUsername(request.getUsername());
-        if(Optional.of(user).isEmpty()){
-            new NoSuchUserExists("User with email id " + request.getUsername() + " does not exist");
-        }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User loginUser = userRepository.findUserByEmailId(request.getUsername()).orElseThrow(
                 () -> new NoSuchUserExists("User with email id " + request.getUsername() + " does not exist"));

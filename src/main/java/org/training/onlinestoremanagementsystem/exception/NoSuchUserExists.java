@@ -2,7 +2,7 @@ package org.training.onlinestoremanagementsystem.exception;
 
 public class NoSuchUserExists extends RuntimeException {
 
-    private String errorMessage;
+    private final String errorMessage;
 
     /**
      * Constructs a new runtime exception with {@code null} as its

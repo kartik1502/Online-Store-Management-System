@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    Logger authLogger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -46,23 +46,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             }
             catch (IllegalArgumentException e){
-                logger.error("Error occurred during getting username from token", e);
+                authLogger.error("Error occurred during getting username from token", e);
             }
             catch (ExpiredJwtException e){
-                logger.error("Jwt Token Validation Failed", e);
+                authLogger.error("Jwt Token Validation Failed", e);
             }
             catch (SignatureException e){
-                logger.error("Authentication failed, invalid Creditials", e);
+                authLogger.error("Authentication failed, invalid Creditials", e);
             }
         }
         else{
-            logger.warn("Jwt Token does not begin with Bearer String");
+            authLogger.warn("Jwt Token does not begin with Bearer String");
         }
 
         if((!Objects.isNull(username)) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            if (Boolean.TRUE.equals(jwtTokenUtil.validateToken(jwtToken, userDetails))) {
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
