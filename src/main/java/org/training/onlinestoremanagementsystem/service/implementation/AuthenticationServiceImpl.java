@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.training.onlinestoremanagementsystem.config.JwtTokenUtil;
 import org.training.onlinestoremanagementsystem.dto.AuthenticationRequest;
 import org.training.onlinestoremanagementsystem.dto.AuthenticationResponse;
 import org.training.onlinestoremanagementsystem.entity.User;
-import org.training.onlinestoremanagementsystem.exception.InvalidCredentials;
 import org.training.onlinestoremanagementsystem.exception.NoSuchUserExists;
 import org.training.onlinestoremanagementsystem.repository.UserRepository;
 import org.training.onlinestoremanagementsystem.service.AuthenticationService;
@@ -36,9 +34,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Value("${spring.application.responseCode}")
     private String responseCode;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
