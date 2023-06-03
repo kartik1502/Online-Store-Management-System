@@ -62,4 +62,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInvalidCredentials(InvalidCredentials ex) {
         return new ResponseEntity<>(new ErrorResponse(errorCodeUnauthorized, Set.of(ex.getLocalizedMessage())), HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(InvalidUser.class)
+    public ResponseEntity<Object> handleInvalidUser(InvalidUser ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeNotAcceptable, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_ACCEPTABLE);
+    }
 }

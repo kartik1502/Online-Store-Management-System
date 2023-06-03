@@ -15,18 +15,18 @@ import java.util.Set;
 
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    @Value("$(spring.application.un_authorized")
-    private String errorCodeUnauthorized;
+    @Value("${spring.application.forbidden}")
+    private String errorCodeForbidden;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        ErrorResponse errorResponse = new ErrorResponse(errorCodeUnauthorized, Set.of("Access Denied"));
+        ErrorResponse errorResponse = new ErrorResponse(errorCodeForbidden, Set.of("Access Denied"));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(out, response);
+        mapper.writeValue(out, errorResponse);
         out.flush();
     }
 }
