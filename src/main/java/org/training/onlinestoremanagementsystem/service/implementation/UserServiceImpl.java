@@ -9,10 +9,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.training.onlinestoremanagementsystem.config.JwtTokenUtil;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.dto.UserDto;
 import org.training.onlinestoremanagementsystem.entity.Role;
 import org.training.onlinestoremanagementsystem.entity.User;
+import org.training.onlinestoremanagementsystem.exception.InvalidUser;
 import org.training.onlinestoremanagementsystem.exception.NoSuchUserExists;
 import org.training.onlinestoremanagementsystem.exception.PasswordDoseNotMatch;
 import org.training.onlinestoremanagementsystem.exception.UserAlreadyExists;
@@ -21,6 +23,8 @@ import org.training.onlinestoremanagementsystem.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.training.onlinestoremanagementsystem.dto.Constants.TOKEN_PREFIX;
 
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -34,6 +38,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -46,6 +53,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public List<SimpleGrantedAuthority> getAuthority(User user){
         return List.of(new SimpleGrantedAuthority(user.getRole().name()));
+    }
+
+    @Override
+    public ResponseDto updateRole(String authToken,String username, String role) {
+
+        String jwtToken = authToken.replace(TOKEN_PREFIX, "");
+        String adminUsername = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        if(username.equals(adminUsername)){
+            throw new InvalidUser("You cannot update your own role");
+        }
+        User user = userRepository.findUserByEmailId(username).orElseThrow(
+                () -> new NoSuchUserExists("User with email id " + username + " does not exist"));
+
+        Role updatedRole = Role.valueOf(role);
+        user.setRole(updatedRole);
+        userRepository.save(user);
+        return new ResponseDto(responseCode, "Role updated successfully");
     }
 
     @Override

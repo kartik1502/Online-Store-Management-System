@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.training.onlinestoremanagementsystem.entity.Role;
 import org.training.onlinestoremanagementsystem.exception.CustomAccessDeniedHandler;
 
 import javax.annotation.Resource;
@@ -61,6 +62,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/registration/users",
                         "/authenticate/users").permitAll()
+                .antMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

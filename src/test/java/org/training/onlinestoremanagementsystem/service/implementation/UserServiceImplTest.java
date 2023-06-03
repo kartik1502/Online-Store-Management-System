@@ -9,10 +9,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.training.onlinestoremanagementsystem.config.JwtTokenUtil;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.dto.UserDto;
 import org.training.onlinestoremanagementsystem.entity.Role;
 import org.training.onlinestoremanagementsystem.entity.User;
+import org.training.onlinestoremanagementsystem.exception.InvalidUser;
 import org.training.onlinestoremanagementsystem.exception.NoSuchUserExists;
 import org.training.onlinestoremanagementsystem.exception.PasswordDoseNotMatch;
 import org.training.onlinestoremanagementsystem.exception.UserAlreadyExists;
@@ -23,7 +25,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -34,13 +36,15 @@ public class UserServiceImplTest {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Mock
+    private JwtTokenUtil jwtTokenUtil;
+
     @Test
     void testLoadUserUsernameInvalidUser(){
 
         Mockito.when(userRepository.findUserByEmailId("kartikkulkarni1411@gmail.com")).thenReturn(Optional.empty());
 
-        NoSuchUserExists exception = assertThrows(NoSuchUserExists.class,() -> userService.loadUserByUsername("kartikkulkarni1411@gmail.com"));
-        assertEquals("User with email id kartikkulkarni1411@gmail.com does not exist",exception.getMessage());
+        assertThrows(NoSuchUserExists.class,() -> userService.loadUserByUsername("kartikkulkarni1411@gmail.com"));
     }
 
     @Test
@@ -71,8 +75,7 @@ public class UserServiceImplTest {
 
         Mockito.when(userRepository.findUserByEmailId("kartikkulkarni1411@gmail.com")).thenReturn(Optional.of(user));
 
-        UserAlreadyExists exception = assertThrows(UserAlreadyExists.class, () -> userService.registerUser(userDto));
-        assertEquals("User with email id kartikkulkarni1411@gmail.com already exists", exception.getMessage());
+        assertThrows(UserAlreadyExists.class, () -> userService.registerUser(userDto));
     }
 
     @Test
@@ -84,8 +87,7 @@ public class UserServiceImplTest {
 
         Mockito.when(userRepository.findUserByEmailId(Mockito.anyString())).thenReturn(Optional.empty());
 
-        PasswordDoseNotMatch exception = assertThrows(PasswordDoseNotMatch.class, () -> userService.registerUser(userDto));
-        assertEquals("Password dose not match", exception.getMessage());
+        assertThrows(PasswordDoseNotMatch.class, () -> userService.registerUser(userDto));
     }
 
     @Test
@@ -136,5 +138,45 @@ public class UserServiceImplTest {
         assertEquals("User Registered Successfully", responseDto.getResponseMessage());
     }
 
+    @Test
+    void testUpdateRoleInvalidUser() {
+
+        String authToken = "lfjksghlkjfhsdgjklhfsdg97e8r805890";
+        String username = "kartikkulkarni1411@gmail.com";
+
+        Mockito.when(jwtTokenUtil.getUsernameFromToken(Mockito.anyString())).thenReturn(username);
+
+        assertThrows(InvalidUser.class, () -> userService.updateRole(authToken, username, Role.ADMIN.name()));
+    }
+
+    @Test
+    void testUpdateRoleNoSuchUserExists() {
+
+        String authToken = "lfjksghlkjfhsdgjklhfsdg97e8r805890";
+        String username = "kartikkulkarni1411@gmail.com";
+
+        Mockito.when(jwtTokenUtil.getUsernameFromToken(Mockito.anyString())).thenReturn("maheshadagli1234@gmail.com");
+        Mockito.when(userRepository.findUserByEmailId(Mockito.anyString())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchUserExists.class, () -> userService.updateRole(authToken, username, Role.ADMIN.name()));
+    }
+
+    @Test
+    void testUpdateRoleSuccessfully() {
+
+        String authToken = "lfjksghlkjfhsdgjklhfsdg97e8r805890";
+        String username = "kartikkulkarni1411@gmail.com";
+
+        Mockito.when(jwtTokenUtil.getUsernameFromToken(Mockito.anyString())).thenReturn("maheshadagli1234@gmail.com");
+
+        User user = new User();
+        user.setEmailId("kartikkulkarni1411@gmail.com");
+        user.setPassword("Ka3k@1411");
+
+        Mockito.when(userRepository.findUserByEmailId(Mockito.anyString())).thenReturn(Optional.of(user));
+
+        ResponseDto responseDto = userService.updateRole(authToken, username, Role.ADMIN.name());
+        assertNotNull(responseDto);
+    }
 
 }

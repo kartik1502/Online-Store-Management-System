@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
-public class AuthenticationControllerTest {
+class AuthenticationControllerTest {
 
     @InjectMocks
     private AuthenticationController authenticationController;
@@ -33,7 +33,7 @@ public class AuthenticationControllerTest {
 
         ResponseEntity<AuthenticationResponse> testResponse = authenticationController.authenticateUser(request);
         assertNotNull(testResponse);
-        assertEquals(testResponse.getStatusCode(), HttpStatus.OK);
-        assertEquals(testResponse.getBody().getResponseMessage(), "Login Successfull");
+        assertEquals(HttpStatus.OK, testResponse.getStatusCode());
+        assertEquals( "Login Successfull", testResponse.getBody().getResponseMessage());
     }
 }

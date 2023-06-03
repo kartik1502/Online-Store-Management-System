@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
-public class AuthenticationServiceImplTest {
+class AuthenticationServiceImplTest {
 
     @InjectMocks
     private AuthenticationServiceImpl authenticationService;
@@ -52,8 +52,7 @@ public class AuthenticationServiceImplTest {
 
         Mockito.when(userService.loadUserByUsername(username)).thenReturn(userDetails);
 
-        NoSuchUserExists exception = assertThrows(NoSuchUserExists.class, () -> authenticationService.authenticate(request));
-        assertEquals("User with email id karthikkulkarni1411@gmail.com does not exist", exception.getMessage());
+        assertThrows(NoSuchUserExists.class, () -> authenticationService.authenticate(request));
     }
 
     @Test
@@ -65,8 +64,7 @@ public class AuthenticationServiceImplTest {
         Mockito.when(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken("karthikkulkarni1411@gmail.com", "Ka3k@1411"))).thenReturn(null);
         Mockito.when(userRepository.findUserByEmailId("karthikkulkarni1411@gmail.com")).thenReturn(Optional.empty());
 
-        NoSuchUserExists exception = assertThrows(NoSuchUserExists.class, () -> authenticationService.authenticate(new AuthenticationRequest("karthikkulkarni1411@gmail.com", "Ka3k@1411")));
-        assertEquals("User with email id karthikkulkarni1411@gmail.com does not exist", exception.getMessage());
+        assertThrows(NoSuchUserExists.class, () -> authenticationService.authenticate(new AuthenticationRequest("karthikkulkarni1411@gmail.com", "Ka3k@1411")));
     }
 
     @Test

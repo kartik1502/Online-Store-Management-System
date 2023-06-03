@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 
     @InjectMocks
     private RegistrationController registrationController;
@@ -37,7 +37,7 @@ public class RegistrationControllerTest {
 
         ResponseEntity<ResponseDto> testResponse = registrationController.registerUser(userDto);
         assertNotNull(testResponse);
-        assertEquals(testResponse.getStatusCode(), HttpStatus.CREATED);
-        assertEquals(testResponse.getBody().getResponseMessage(), "User registered successfully");
+        assertEquals(HttpStatus.CREATED, testResponse.getStatusCode());
+        assertEquals("User registered successfully", testResponse.getBody().getResponseMessage());
     }
 }
