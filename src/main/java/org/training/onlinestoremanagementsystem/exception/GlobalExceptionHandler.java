@@ -67,4 +67,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleInvalidUser(InvalidUser ex) {
         return new ResponseEntity<>(new ErrorResponse(errorCodeNotAcceptable, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_ACCEPTABLE);
     }
+
+    @ExceptionHandler(NoSuchProductExists.class)
+    public ResponseEntity<Object> handleNoSuchProductExists(NoSuchProductExists ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeNotFound, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_FOUND);
+    }
+
 }
