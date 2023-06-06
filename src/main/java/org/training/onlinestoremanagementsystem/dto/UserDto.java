@@ -32,6 +32,10 @@ public class UserDto {
     private int age;
 
     @NotNull
+    @Pattern(regexp = "[6-9][0-9]{9}", message = "Contact Number should be valid")
+    private String contactNumber;
+
+    @NotNull
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "Password should be valid")
     private String password;
 

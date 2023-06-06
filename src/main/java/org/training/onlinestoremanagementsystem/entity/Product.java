@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -23,7 +20,8 @@ public class Product {
 
     private int quantity;
 
-    private String company;
-
     private double price;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Company company;
 }

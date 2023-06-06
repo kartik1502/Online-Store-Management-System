@@ -63,6 +63,7 @@ public class SecurityConfig {
                         "/registration/users",
                         "/authenticate/users").permitAll()
                 .antMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
+                .antMatchers("/internal/**").hasAuthority(Role.EMPLOYEE.name())
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
