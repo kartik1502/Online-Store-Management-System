@@ -20,6 +20,6 @@ public class ProductQuantity {
 
     private int quantity;
 
-    @ManyToOne
-    private StoreOrder storeOrder;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Cart cart;
 }

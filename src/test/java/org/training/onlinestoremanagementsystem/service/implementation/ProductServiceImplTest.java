@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.training.onlinestoremanagementsystem.dto.ProductDto;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.dto.UpdateProductDto;
+import org.training.onlinestoremanagementsystem.dto.ViewProductDto;
 import org.training.onlinestoremanagementsystem.entity.Company;
 import org.training.onlinestoremanagementsystem.entity.Product;
 import org.training.onlinestoremanagementsystem.exception.NoSuchProductExists;
@@ -164,7 +165,7 @@ public class ProductServiceImplTest {
         Mockito.when(companyRepository.findCompanyByCompanyNameContainingIgnoreCase(companyName)).thenReturn(companies);
         Mockito.when(productRepository.findAllByCompanyIn(companies)).thenReturn(products);
 
-        List<ProductDto> resquiredProducts = productService.getAllProducts(null, companyName);
+        List<ViewProductDto> resquiredProducts = productService.getAllProducts(null, companyName);
         assertNotNull(resquiredProducts);
         assertEquals(2, resquiredProducts.size());
     }
@@ -191,7 +192,7 @@ public class ProductServiceImplTest {
         products.add(product1);
 
         Mockito.when(productRepository.findAll()).thenReturn(products);
-        List<ProductDto> requiredProducts = productService.getAllProducts(null, null);
+        List<ViewProductDto> requiredProducts = productService.getAllProducts(null, null);
         assertNotNull(requiredProducts);
         assertEquals(2, requiredProducts.size());
     }
@@ -220,7 +221,7 @@ public class ProductServiceImplTest {
         products.add(product1);
 
         Mockito.when(productRepository.findAllByProductNameContainingIgnoreCase(productName)).thenReturn(products);
-        List<ProductDto> requiredProducts = productService.getAllProducts(productName, null);
+        List<ViewProductDto> requiredProducts = productService.getAllProducts(productName, null);
         assertNotNull(requiredProducts);
         assertEquals(2, requiredProducts.size());
     }
@@ -252,7 +253,7 @@ public class ProductServiceImplTest {
         Mockito.when(companyRepository.findCompanyByCompanyNameContainingIgnoreCase(companyName)).thenReturn(companies);
         Mockito.when(productRepository.findAllByProductNameContainingIgnoreCaseAndCompanyIn(productName, companies)).thenReturn(products);
 
-        List<ProductDto> requiredProducts = productService.getAllProducts(productName, companyName);
+        List<ViewProductDto> requiredProducts = productService.getAllProducts(productName, companyName);
         assertNotNull(requiredProducts);
         assertEquals(2, requiredProducts.size());
     }

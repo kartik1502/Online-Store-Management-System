@@ -21,7 +21,7 @@ public class Payment {
     private UUID paymentId;
 
     @OneToOne
-    private StoreOrder storeOrder;
+    private Cart cart;
 
     @CreationTimestamp
     private LocalDate paymentDate;

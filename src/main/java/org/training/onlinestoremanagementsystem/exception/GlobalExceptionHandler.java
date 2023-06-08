@@ -73,4 +73,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(errorCodeNotFound, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(QuantityExceeded.class)
+    public ResponseEntity<Object> handleQuantityExceeded(QuantityExceeded ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeNotAcceptable, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(NoSuchCartExists.class)
+    public ResponseEntity<Object> handleNoSuchCartExists(NoSuchCartExists ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeNotFound, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_FOUND);
+    }
 }

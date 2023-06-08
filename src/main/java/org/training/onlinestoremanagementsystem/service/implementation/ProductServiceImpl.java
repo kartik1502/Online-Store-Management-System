@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.training.onlinestoremanagementsystem.dto.ProductDto;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.dto.UpdateProductDto;
+import org.training.onlinestoremanagementsystem.dto.ViewProductDto;
 import org.training.onlinestoremanagementsystem.entity.Company;
 import org.training.onlinestoremanagementsystem.entity.Product;
 import org.training.onlinestoremanagementsystem.exception.NoSuchProductExists;
@@ -68,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getAllProducts(String productName, String companyName) {
+    public List<ViewProductDto> getAllProducts(String productName, String companyName) {
 
         List<Product> products = null;
         if(Objects.isNull(productName) && !Objects.isNull(companyName)){
@@ -89,10 +90,10 @@ public class ProductServiceImpl implements ProductService {
                 products = productRepository.findAllByProductNameContainingIgnoreCaseAndCompanyIn(productName, companies);
             }
         }
-        List<ProductDto> requiredProducts = new ArrayList<>();
+        List<ViewProductDto> requiredProducts = new ArrayList<>();
         if(!Objects.isNull(products)){
             products.forEach(product -> {
-                ProductDto productDto = new ProductDto();
+                ViewProductDto productDto = new ViewProductDto();
                 BeanUtils.copyProperties(product, productDto);
                 productDto.setCompanyName(product.getCompany().getCompanyName());
                 requiredProducts.add(productDto);
