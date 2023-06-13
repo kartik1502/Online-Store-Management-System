@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.training.onlinestoremanagementsystem.dto.ProductDto;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.dto.UpdateProductDto;
+import org.training.onlinestoremanagementsystem.dto.ViewProductDto;
 import org.training.onlinestoremanagementsystem.entity.Company;
 import org.training.onlinestoremanagementsystem.entity.Product;
 import org.training.onlinestoremanagementsystem.service.ProductService;
@@ -68,12 +69,12 @@ public class ProductControllerTest {
     @Test
     void testGetAllProducts() {
 
-        List<ProductDto> products = new ArrayList<>();
-        products.add(new ProductDto("Talc",60 , "Ponds", 55));
-        products.add(new ProductDto("Talc",55 , "Park Avenue", 90));
+        List<ViewProductDto> products = new ArrayList<>();
+        products.add(new ViewProductDto(1,"Talc",60 , "Ponds", 55));
+        products.add(new ViewProductDto(2,"Talc",55 , "Park Avenue", 90));
 
         Mockito.when(productService.getAllProducts("T", "p")).thenReturn(products);
-        ResponseEntity<List<ProductDto>> resultResponse = productController.getAllProducts("T", "p");
+        ResponseEntity<List<ViewProductDto>> resultResponse = productController.getAllProducts("T", "p");
         assertNotNull(resultResponse);
         assertEquals(HttpStatus.OK, resultResponse.getStatusCode());
         assertEquals(2, resultResponse.getBody().size());

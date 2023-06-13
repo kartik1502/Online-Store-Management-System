@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.training.onlinestoremanagementsystem.dto.ProductDto;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.dto.UpdateProductDto;
+import org.training.onlinestoremanagementsystem.dto.ViewProductDto;
 import org.training.onlinestoremanagementsystem.service.ProductService;
 
 import javax.validation.Valid;
@@ -29,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProductDto>> getAllProducts(@RequestParam(required = false) String productName,@RequestParam(required = false) String companyName) {
+    public ResponseEntity<List<ViewProductDto>> getAllProducts(@RequestParam(required = false) String productName, @RequestParam(required = false) String companyName) {
         return new ResponseEntity<>(productService.getAllProducts(productName, companyName), HttpStatus.OK);
     }
 
