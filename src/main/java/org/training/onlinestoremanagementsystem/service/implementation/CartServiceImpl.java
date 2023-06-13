@@ -50,7 +50,7 @@ public class CartServiceImpl implements CartService {
     @Value("${spring.application.responseCode}")
     private String responseCode;
 
-    private Optional<Cart> getCartFromToken(String authToken){
+    public Optional<Cart> getCartFromToken(String authToken){
         String jwtToken = authToken.replace(TOKEN_PREFIX, "");
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user = userRepository.findUserByEmailId(username).get();
@@ -60,8 +60,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public ResponseDto addToCart(String authToken, List<AddToCartDto> addToCartDtos) {
 
+        String jwtToken = authToken.replace(TOKEN_PREFIX, "");
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         Optional<Cart> cart = getCartFromToken(authToken);
-        User user = cart.get().getUser();
+        User user = userRepository.findUserByEmailId(username).get();
         Cart newCart;
         Map<Integer, ProductQuantity> productQuantityMap = null;
         if (cart.isPresent()) {
@@ -145,13 +147,15 @@ public class CartServiceImpl implements CartService {
         if(!cart.isPresent()){
             throw new NoSuchCartExists("There are no pending cart");
         }
-        User user = cart.get().getUser();
         List<ProductQuantity> productQuantities = productQuantityRepository.findAllByCart(cart.get());
         Map<Integer, ProductQuantity> productQuantityMap = productQuantities.stream().collect(Collectors.toMap(ProductQuantity::getProductId, Function.identity()));
+
         List<Integer> productIds = addToCartDtos.stream().map(AddToCartDto::getProductId).collect(Collectors.toList());
         Map<Integer, Product> productMap = productRepository.findAllByProductIdIn(productIds).stream().collect(Collectors.toMap(Product::getProductId, Function.identity()));
+
         List<ProductQuantity> deletedProductQuantities = new ArrayList<>();
         List<Product> productList = new ArrayList<>();
+
         addToCartDtos.forEach(addToCartDto -> {
             ProductQuantity productQuantity = productQuantityMap.get(addToCartDto.getProductId());
             Product product = productMap.get(addToCartDto.getProductId());

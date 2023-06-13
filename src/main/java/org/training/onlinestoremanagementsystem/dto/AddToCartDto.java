@@ -12,4 +12,8 @@ public class AddToCartDto {
     private int productId;
 
     private int quantity;
+
+    public AddToCartDto(int productId) {
+        this.productId = productId;
+    }
 }
