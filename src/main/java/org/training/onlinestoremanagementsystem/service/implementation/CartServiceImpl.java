@@ -14,6 +14,7 @@ import org.training.onlinestoremanagementsystem.entity.ProductQuantity;
 import org.training.onlinestoremanagementsystem.entity.User;
 import org.training.onlinestoremanagementsystem.exception.NoSuchCartExists;
 import org.training.onlinestoremanagementsystem.exception.NoSuchProductExists;
+import org.training.onlinestoremanagementsystem.exception.NoSuchUserExists;
 import org.training.onlinestoremanagementsystem.exception.QuantityExceeded;
 import org.training.onlinestoremanagementsystem.repository.CartRepository;
 import org.training.onlinestoremanagementsystem.repository.ProductQuantityRepository;
@@ -21,7 +22,6 @@ import org.training.onlinestoremanagementsystem.repository.ProductRepository;
 import org.training.onlinestoremanagementsystem.repository.UserRepository;
 import org.training.onlinestoremanagementsystem.service.CartService;
 
-import java.rmi.MarshalledObject;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -54,7 +54,7 @@ public class CartServiceImpl implements CartService {
         String jwtToken = authToken.replace(TOKEN_PREFIX, "");
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user = userRepository.findUserByEmailId(username).get();
-        return cartRepository.findCartByUser(user);
+        return cartRepository.findCartByStatusAndUser(CART_ORDER_PENDING, user);
     }
 
     @Override
@@ -111,11 +111,15 @@ public class CartServiceImpl implements CartService {
     @Override
     public ViewCartDto viewCart(String authToken) {
 
-        Optional<Cart> cart = getCartFromToken(authToken);
+        String jwtToken = authToken.replace(TOKEN_PREFIX, "");
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user = userRepository.findUserByEmailId(username).orElseThrow(
+                () -> new NoSuchUserExists("User does not exist")
+        );
+        Optional<Cart> cart = cartRepository.findCartByUser(user);
         if(!cart.isPresent()){
             throw new NoSuchCartExists("There are no pending cart");
         }
-        User user = cart.get().getUser();
         List<ProductQuantity> productQuantities = productQuantityRepository.findAllByCart(cart.get());
         List<Integer> productIds = productQuantities.stream().map(ProductQuantity::getProductId).collect(Collectors.toList());
         Map<Integer, Product> productMap = productRepository.findAllByProductIdIn(productIds).stream().collect(Collectors.toMap(Product::getProductId, Function.identity()));

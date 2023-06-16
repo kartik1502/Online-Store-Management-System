@@ -7,8 +7,10 @@ public class Constants {
     public static final String SIGNING_KEY = "Kartik1411";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-
     public static final String CART_ORDER_COMPLETED = "Cart Order Completed";
-
     public static final String CART_ORDER_PENDING = "Cart Order Pending";
+    public static final String PAYTM = "paytm";
+    public static final String GPAY = "gpay";
+    public static final String PHONE_PAY = "phonepay";
 }
+
