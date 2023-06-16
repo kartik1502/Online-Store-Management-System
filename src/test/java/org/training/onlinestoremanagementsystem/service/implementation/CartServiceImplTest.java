@@ -324,6 +324,7 @@ public class CartServiceImplTest {
         Cart cart = new Cart();
         cart.setUser(user);
         cart.setTotalPrice(300);
+        cart.setStatus("Cart Order Pending");
 
         Mockito.when(jwtTokenUtil.getUsernameFromToken(authToken)).thenReturn(username);
         Mockito.when(userRepository.findUserByEmailId(username)).thenReturn(Optional.of(user));
