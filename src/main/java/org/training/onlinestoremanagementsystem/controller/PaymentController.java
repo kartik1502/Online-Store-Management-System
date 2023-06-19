@@ -17,6 +17,6 @@ public class PaymentController {
 
     @PostMapping("/payments")
     public ResponseEntity<ResponseDto> makePayment(@RequestHeader(value = "Authorization", required = false) String authToken, String walletId) {
-        return new ResponseEntity<ResponseDto>(paymentService.makePayment(authToken, walletId), HttpStatus.CREATED);
+        return new ResponseEntity<>(paymentService.makePayment(authToken, walletId), HttpStatus.CREATED);
     }
 }

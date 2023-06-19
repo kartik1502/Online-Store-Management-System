@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import org.training.onlinestoremanagementsystem.config.JwtTokenUtil;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
 import org.training.onlinestoremanagementsystem.entity.*;
-import org.training.onlinestoremanagementsystem.exception.InSufficientWalletBalance;
-import org.training.onlinestoremanagementsystem.exception.NoSuchUserExists;
-import org.training.onlinestoremanagementsystem.exception.NoSuchWalletExists;
-import org.training.onlinestoremanagementsystem.exception.QuantityExceeded;
+import org.training.onlinestoremanagementsystem.exception.*;
 import org.training.onlinestoremanagementsystem.repository.*;
 import org.training.onlinestoremanagementsystem.service.PaymentService;
 
@@ -56,7 +53,7 @@ public class PaymentServiceImpl implements PaymentService {
                 () -> new NoSuchWalletExists("Wallet with wallet id " + walletId + " does not exist")
         );
         Cart cart = cartRepository.findCartByStatusAndUser(CART_ORDER_PENDING, user).orElseThrow(
-                () -> new NoSuchWalletExists("Cart with status " + CART_ORDER_PENDING + " does not exist")
+                () -> new NoSuchCartExists("Cart with status " + CART_ORDER_PENDING + " does not exist")
         );
         Map<Integer, ProductQuantity> productQuantityMap = productQuantityRepository.findAllByCart(cart).stream().collect(Collectors.toMap(ProductQuantity::getProductId, Function.identity()));
         Map<Integer, Product> productMap = productRepository.findAllByProductIdIn(productQuantityMap.keySet().stream().collect(Collectors.toList())).stream().collect(Collectors.toMap(Product::getProductId, Function.identity()));
