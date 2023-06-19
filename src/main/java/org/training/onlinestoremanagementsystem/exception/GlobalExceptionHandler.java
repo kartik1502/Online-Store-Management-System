@@ -82,4 +82,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNoSuchCartExists(NoSuchCartExists ex) {
         return new ResponseEntity<>(new ErrorResponse(errorCodeNotFound, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(NoSuchWalletExists.class)
+    public ResponseEntity<Object> handleNoSuchWalletExists(NoSuchWalletExists ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeNotFound, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(WalletAlreadyExists.class)
+    public ResponseEntity<Object> handleWalletAlreadyExists(WalletAlreadyExists ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeConflict, Set.of(ex.getLocalizedMessage())), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InSufficientWalletBalance.class)
+    public ResponseEntity<Object> handleInSufficientWalletBalance(InSufficientWalletBalance ex) {
+        return new ResponseEntity<>(new ErrorResponse(errorCodeNotAcceptable, Set.of(ex.getLocalizedMessage())), HttpStatus.NOT_ACCEPTABLE);
+    }
 }
