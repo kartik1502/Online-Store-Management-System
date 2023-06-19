@@ -198,5 +198,4 @@ public class CartServiceImpl implements CartService {
         productRepository.saveAll(productMap.values());
         return new ResponseDto(responseCode, "Successfully deleted all the products in the cart");
     }
-
 }
