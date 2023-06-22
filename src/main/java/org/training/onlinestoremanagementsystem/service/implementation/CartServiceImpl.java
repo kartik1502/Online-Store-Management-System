@@ -116,7 +116,7 @@ public class CartServiceImpl implements CartService {
         User user = userRepository.findUserByEmailId(username).orElseThrow(
                 () -> new NoSuchUserExists("User does not exist")
         );
-        Optional<Cart> cart = cartRepository.findCartByUser(user);
+        Optional<Cart> cart = cartRepository.findCartByStatusAndUser(CART_ORDER_PENDING,user);
         if(!cart.isPresent()){
             throw new NoSuchCartExists("There are no pending cart");
         }

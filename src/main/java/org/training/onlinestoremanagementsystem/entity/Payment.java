@@ -27,4 +27,6 @@ public class Payment {
     private LocalDate paymentDate;
 
     private String paymentType;
+
+    private String walletId;
 }
