@@ -23,7 +23,7 @@ The Online Store Management System is a web-based application that allows store 
 
 ## Installation
 
-1. Clone the repository: `https://github.com/Spring-Boot-Master-Class-Tutorial/Online-Store-Management-System.git`
+1. Clone the repository: `https://github.com/kartik1502/Online-Store-Management-System.git`
 2. Navigate to the project directory
 3. Build the project with Maven: `mvn clean install`
 4. Start the application: `mvn spring-boot:run`
