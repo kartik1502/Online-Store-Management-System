@@ -328,7 +328,7 @@ public class CartServiceImplTest {
 
         Mockito.when(jwtTokenUtil.getUsernameFromToken(authToken)).thenReturn(username);
         Mockito.when(userRepository.findUserByEmailId(username)).thenReturn(Optional.of(user));
-        Mockito.when(cartRepository.findCartByUser(user)).thenReturn(Optional.of(cart));
+        Mockito.when(cartRepository.findCartByStatusAndUser("Cart Order Pending",user)).thenReturn(Optional.of(cart));
 
         List<ProductQuantity> productQuantities = new ArrayList<>();
         ProductQuantity productQuantity = new ProductQuantity();

@@ -37,7 +37,7 @@ public class WalletServiceImpl implements WalletService {
         User user = userRepository.findUserByEmailId(getUsernameFromAuthToken(authToken)).orElseThrow(
                 () -> new NoSuchUserExists("User with email id " + getUsernameFromAuthToken(authToken) + " does not exist")
         );
-        Optional<Wallet> wallet = walletRepository.findWalletByWalletType(walletType);
+        Optional<Wallet> wallet = walletRepository.findWalletByWalletTypeAndUser(walletType, user);
         Wallet newWallet;
         if(wallet.isPresent()){
             newWallet = wallet.get();

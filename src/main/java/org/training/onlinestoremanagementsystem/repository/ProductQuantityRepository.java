@@ -9,4 +9,6 @@ import java.util.List;
 public interface ProductQuantityRepository extends JpaRepository<ProductQuantity, Integer> {
 
     List<ProductQuantity> findAllByCart(Cart cart);
+
+    List<ProductQuantity> findAllByCartIn(List<Cart> carts);
 }

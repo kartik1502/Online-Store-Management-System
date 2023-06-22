@@ -7,11 +7,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.training.onlinestoremanagementsystem.config.JwtTokenUtil;
+import org.training.onlinestoremanagementsystem.dto.CartQuantity;
 import org.training.onlinestoremanagementsystem.dto.ResponseDto;
+import org.training.onlinestoremanagementsystem.dto.TransactionDto;
 import org.training.onlinestoremanagementsystem.entity.*;
 import org.training.onlinestoremanagementsystem.exception.*;
 import org.training.onlinestoremanagementsystem.repository.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -267,5 +270,17 @@ public class PaymentServiceImplTest {
         Mockito.when(productRepository.findAllByProductIdIn(productIds)).thenReturn(products);
 
         assertThrows(InSufficientWalletBalance.class, () -> paymentService.makePayment(authToken, "1"));
+    }
+
+    @Test
+    void testGetTransaction_UserNotFound(){
+
+        String authToken = "kfejhrw7895t34jkhrkljghjk.elrkfhweuiohftiourtqwyerui.wrqjheuirhweuityowiuertq";
+        String username = "kartikkulkarni1411@gmail.com";
+
+        Mockito.when(paymentService.getUsernameFromAuthToken(authToken)).thenReturn(username);
+        Mockito.when(userRepository.findUserByEmailId(username)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchUserExists.class, () -> paymentService.getTransactions(authToken));
     }
 }
